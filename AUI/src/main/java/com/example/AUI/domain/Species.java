@@ -3,10 +3,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-//@Table(name="species")
+@Table(name="species")
 @EqualsAndHashCode
 @Builder
-@ToString
 @Getter
 @Setter
 @Entity
@@ -26,5 +25,13 @@ public class Species implements Comparable<Species> {
     @Override
     public int compareTo(Species other) {
         return this.name.compareTo(other.name);
+    }
+
+    @Override
+    public String toString() {
+        return "Species{" +
+                "name='" + name + '\'' +
+                ", classificationYear=" + classificationYear +
+                '}';
     }
 }

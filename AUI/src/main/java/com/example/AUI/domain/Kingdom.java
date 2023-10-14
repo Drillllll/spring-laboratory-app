@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 
-//@Table(name="kingdoms")
-@EqualsAndHashCode
+@Table(name="kingdoms")
+@EqualsAndHashCode(exclude="species")
 @Builder
-@ToString
 @Getter
 @Setter
 @Entity
@@ -23,7 +22,7 @@ public class Kingdom implements Comparable<Kingdom> {
     @Column(name="taxonomy_year")
     private Integer taxonomyYear;
 
-    @OneToMany(mappedBy = "kingdom")
+    @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Species> species = new HashSet<>();
 
     @Override
@@ -31,4 +30,11 @@ public class Kingdom implements Comparable<Kingdom> {
         return this.name.compareTo(other.name);
     }
 
+    @Override
+    public String toString() {
+        return "Kingdom{" +
+                "name='" + name + '\'' +
+                ", taxonomyYear=" + taxonomyYear +
+                '}';
+    }
 }

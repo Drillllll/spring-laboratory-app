@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class CommandHandler {
@@ -73,6 +74,7 @@ public class CommandHandler {
                 .name(name)
                 .taxonomyYear(taxonomyYear)
                 .species(new HashSet<>())
+                .id(UUID.randomUUID())
                 .build();
         kingdomService.save(kingdom);
         System.out.println("kingdom added");
@@ -84,6 +86,7 @@ public class CommandHandler {
                 .name(name)
                 .classificationYear(classificationYear)
                 .kingdom(kingdom)
+                .id(UUID.randomUUID())
                 .build();
         speciesService.save(species);
 

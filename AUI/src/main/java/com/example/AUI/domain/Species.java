@@ -1,6 +1,7 @@
 package com.example.AUI.domain;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.UUID;
 
 
 @Table(name="species")
@@ -13,7 +14,8 @@ import lombok.*;
 @AllArgsConstructor
 public class Species implements Comparable<Species> {
     @Id
-    @Column
+    private UUID id;
+    @Column (unique = true)
     private String name;
     @Column(name="classification_year")
     private Integer classificationYear;

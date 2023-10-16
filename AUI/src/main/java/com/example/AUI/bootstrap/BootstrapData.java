@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 @Component
 public class BootstrapData  implements CommandLineRunner {
@@ -30,6 +31,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Animalia")
                 .taxonomyYear(1758)
                 .species(new HashSet<>())
+                .id(UUID.randomUUID())
                 .build();
 
         Kingdom animaliaSaved = kingdomService.save(animalia);
@@ -38,6 +40,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Plantae")
                 .taxonomyYear(1956)
                 .species(new HashSet<>())
+                .id(UUID.randomUUID())
                 .build();
 
         Kingdom plantaeSaved = kingdomService.save(plantae);
@@ -46,6 +49,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Fungi")
                 .taxonomyYear(1932)
                 .species(new HashSet<>())
+                .id(UUID.randomUUID())
                 .build();
 
         Kingdom fungiSaved = kingdomService.save(fungi);
@@ -56,6 +60,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Puma")
                 .classificationYear(1771)
                 .kingdom(animalia)
+                .id(UUID.randomUUID())
                 .build();
 
         Species pumaSaved = speciesService.save(puma);
@@ -64,6 +69,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Hippocampus")
                 .classificationYear(1810)
                 .kingdom(animalia)
+                .id(UUID.randomUUID())
                 .build();
 
         Species hippocampusSaved = speciesService.save(hippocampus);
@@ -72,6 +78,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Quercus")
                 .classificationYear(1753)
                 .kingdom(plantae)
+                .id(UUID.randomUUID())
                 .build();
 
         Species quercusSaved = speciesService.save(quercus);
@@ -80,6 +87,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Salix")
                 .classificationYear(1752)
                 .kingdom(plantae)
+                .id(UUID.randomUUID())
                 .build();
 
         Species salixSaved = speciesService.save(salix);
@@ -88,6 +96,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Aspergillus")
                 .classificationYear(1930)
                 .kingdom(fungi)
+                .id(UUID.randomUUID())
                 .build();
 
         Species aspergillusSaved = speciesService.save(aspergillus);
@@ -96,6 +105,7 @@ public class BootstrapData  implements CommandLineRunner {
                 .name("Gymnopus")
                 .classificationYear(1806)
                 .kingdom(fungi)
+                .id(UUID.randomUUID())
                 .build();
 
         Species gymnopusSaved = speciesService.save(gymnopus);

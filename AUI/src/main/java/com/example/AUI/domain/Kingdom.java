@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Table(name="kingdoms")
@@ -17,12 +18,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class Kingdom implements Comparable<Kingdom> {
     @Id
-    @Column
+    private UUID id;
+    @Column(unique = true)
     private String name;
     @Column(name="taxonomy_year")
     private Integer taxonomyYear;
 
-    @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "kingdom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Species> species = new HashSet<>();
 
     @Override

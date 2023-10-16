@@ -19,7 +19,7 @@ public class LineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        while (!command.equals("quit")) {
+        while (!command.equals("q")) {
             System.out.println();
             System.out.println("Enter h for help");
             System.out.println("Enter a command: ");

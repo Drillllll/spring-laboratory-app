@@ -4,16 +4,20 @@ import com.example.AUI.domain.Kingdom;
 import com.example.AUI.domain.Species;
 import com.example.AUI.services.KingdomService;
 import com.example.AUI.services.SpeciesService;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-
 import java.util.HashSet;
-import java.util.List;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
 
 @Component
 public class CommandHandler {
     private final KingdomService kingdomService;
     private final SpeciesService speciesService;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     public CommandHandler(KingdomService kingdomService, SpeciesService speciesService) {
         this.kingdomService = kingdomService;
@@ -49,6 +53,7 @@ public class CommandHandler {
                 deleteSpecies(commandParts[1]);
                 break;
             case "q":
+                quit();
                 break;
             default:
                 System.out.println("wrong command");
@@ -67,6 +72,12 @@ public class CommandHandler {
         System.out.println("delete kingdom:         -K kingdom_name");
         System.out.println("delete species:         -S species_name");
         System.out.println("quit:                   q");
+    }
+
+    public void quit() {
+        if (applicationContext instanceof ConfigurableApplicationContext) {
+           ((ConfigurableApplicationContext) applicationContext).close();
+        }
     }
 
     private void addKingdom(String name, Integer taxonomyYear) {

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -25,6 +26,7 @@ public class CommandHandler {
     }
 
 
+    @Transactional
     public void handleCommand(String command) {
         String[] commandParts = command.split(" ");
 
@@ -81,7 +83,8 @@ public class CommandHandler {
         }
     }
 
-    private void addKingdom(String name, Integer taxonomyYear) {
+    @Transactional
+    public void addKingdom(String name, Integer taxonomyYear) {
         Kingdom kingdom = Kingdom.builder()
                 .name(name)
                 .taxonomyYear(taxonomyYear)
@@ -92,7 +95,8 @@ public class CommandHandler {
         System.out.println("kingdom added");
     }
 
-    private void addSpecies(String name, Integer classificationYear, String kingdomName) {
+    @Transactional
+    public void addSpecies(String name, Integer classificationYear, String kingdomName) {
         Kingdom kingdom = kingdomService.findByName(kingdomName);
         Species species = Species.builder()
                 .name(name)
@@ -107,7 +111,8 @@ public class CommandHandler {
         System.out.println("species added");
     }
 
-    private void listKingdoms() {
+    @Transactional
+    public void listKingdoms() {
         System.out.println("listing kingdoms");
         Iterable<Kingdom> kingdoms = kingdomService.findAll();
         for (Kingdom kingdom : kingdoms) {
@@ -115,7 +120,8 @@ public class CommandHandler {
         }
     }
 
-    private void listSpecies() {
+    @Transactional
+    public void listSpecies() {
         System.out.println("listing species");
         Iterable<Species> species = speciesService.findAll();
         for (Species s : species) {
@@ -123,7 +129,8 @@ public class CommandHandler {
         }
     }
 
-    private void listSpeciesInKingdom(String name) {
+    @Transactional
+    public void listSpeciesInKingdom(String name) {
         System.out.println("listing species in " + name);
         Kingdom kingdom = kingdomService.findByName(name);
         Iterable<Species> species = speciesService.findByKingdom(kingdom);
@@ -131,12 +138,14 @@ public class CommandHandler {
             System.out.println(s);
     }
 
-    private void deleteKingdom(String name) {
+    @Transactional
+    public void deleteKingdom(String name) {
         kingdomService.delete(kingdomService.findByName(name));
         System.out.println("kingdom deleted");
     }
 
-    private void deleteSpecies(String name) {
+    @Transactional
+    public void deleteSpecies(String name) {
         speciesService.delete(speciesService.findByName(name));
         System.out.println("species deleted");
     }

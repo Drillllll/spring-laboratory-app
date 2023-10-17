@@ -24,6 +24,7 @@ public class CommandHandler {
         this.speciesService = speciesService;
     }
 
+
     public void handleCommand(String command) {
         String[] commandParts = command.split(" ");
 

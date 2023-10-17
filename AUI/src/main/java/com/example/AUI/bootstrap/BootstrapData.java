@@ -5,6 +5,7 @@ import com.example.AUI.domain.Kingdom;
 import com.example.AUI.domain.Species;
 import com.example.AUI.services.KingdomService;
 import com.example.AUI.services.SpeciesService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 @Component
-public class BootstrapData  implements CommandLineRunner {
+public class BootstrapData {
 
     private final KingdomService kingdomService;
     private final SpeciesService speciesService;
@@ -22,8 +23,9 @@ public class BootstrapData  implements CommandLineRunner {
         this.speciesService = speciesService;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+
+    @PostConstruct
+    public void initialize(){
 
         //saving kingdoms to DB
 
@@ -121,7 +123,6 @@ public class BootstrapData  implements CommandLineRunner {
         kingdomService.save(animaliaSaved);
         kingdomService.save(plantaeSaved);
         kingdomService.save(fungiSaved);
-
 
     }
 }

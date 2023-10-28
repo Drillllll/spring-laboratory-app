@@ -1,7 +1,7 @@
-package com.example.AUI.services;
+package com.example.AUI.species.service;
 
-import com.example.AUI.domain.Kingdom;
-import com.example.AUI.domain.Species;
+import com.example.AUI.kingdom.entity.Kingdom;
+import com.example.AUI.species.entity.Species;
 
 import java.util.List;
 

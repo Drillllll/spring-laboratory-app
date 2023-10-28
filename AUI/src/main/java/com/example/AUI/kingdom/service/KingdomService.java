@@ -1,7 +1,7 @@
-package com.example.AUI.services;
+package com.example.AUI.kingdom.service;
 
 
-import com.example.AUI.domain.Kingdom;
+import com.example.AUI.kingdom.entity.Kingdom;
 
 public interface KingdomService {
     Iterable<Kingdom> findAll();

@@ -1,12 +1,8 @@
-package com.example.AUI.services;
+package com.example.AUI.kingdom.service;
 
-import com.example.AUI.domain.Kingdom;
-import com.example.AUI.domain.Species;
-import com.example.AUI.repositories.KingdomRepository;
-import com.example.AUI.repositories.SpeciesRepository;
+import com.example.AUI.kingdom.entity.Kingdom;
+import com.example.AUI.kingdom.repository.KingdomRepository;
 import org.springframework.stereotype.Service;
-
-import javax.imageio.spi.ServiceRegistry;
 
 @Service
 public class KingdomServiceImpl implements KingdomService {

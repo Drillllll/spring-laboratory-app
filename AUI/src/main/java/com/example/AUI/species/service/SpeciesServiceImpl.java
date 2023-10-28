@@ -1,8 +1,8 @@
-package com.example.AUI.services;
+package com.example.AUI.species.service;
 
-import com.example.AUI.domain.Kingdom;
-import com.example.AUI.domain.Species;
-import com.example.AUI.repositories.SpeciesRepository;
+import com.example.AUI.kingdom.entity.Kingdom;
+import com.example.AUI.species.entity.Species;
+import com.example.AUI.species.repository.SpeciesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

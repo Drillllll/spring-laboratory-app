@@ -1,4 +1,5 @@
-package com.example.AUI.domain;
+package com.example.AUI.species.entity;
+import com.example.AUI.kingdom.entity.Kingdom;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;

@@ -1,9 +1,9 @@
 package com.example.AUI.runner;
 
-import com.example.AUI.domain.Kingdom;
-import com.example.AUI.domain.Species;
-import com.example.AUI.services.KingdomService;
-import com.example.AUI.services.SpeciesService;
+import com.example.AUI.kingdom.entity.Kingdom;
+import com.example.AUI.species.entity.Species;
+import com.example.AUI.kingdom.service.KingdomService;
+import com.example.AUI.species.service.SpeciesService;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import java.util.HashSet;

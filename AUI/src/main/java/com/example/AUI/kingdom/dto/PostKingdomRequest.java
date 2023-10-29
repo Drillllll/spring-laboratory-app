@@ -1,7 +1,6 @@
 package com.example.AUI.kingdom.dto;
 
 import lombok.*;
-import java.util.UUID;
 
 @EqualsAndHashCode
 @Builder
@@ -9,8 +8,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetKingdomResponse {
-    private UUID id;
+public class PostKingdomRequest {
     private String name;
     private Integer taxonomyYear;
 }

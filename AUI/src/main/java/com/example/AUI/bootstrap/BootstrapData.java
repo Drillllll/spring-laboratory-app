@@ -26,6 +26,7 @@ public class BootstrapData {
     @PostConstruct
     public void initialize(){
 
+
         //saving kingdoms to DB
 
         Kingdom animalia = Kingdom.builder()

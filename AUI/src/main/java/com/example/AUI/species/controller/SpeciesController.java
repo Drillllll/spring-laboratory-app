@@ -2,17 +2,21 @@ package com.example.AUI.species.controller;
 
 import com.example.AUI.kingdom.dto.GetKingdomResponse;
 import com.example.AUI.kingdom.dto.GetKingdomsResponse;
+import com.example.AUI.kingdom.dto.PostKingdomRequest;
 import com.example.AUI.kingdom.dto.PutKingdomRequest;
 import com.example.AUI.kingdom.entity.Kingdom;
 import com.example.AUI.kingdom.mapper.KingdomMapper;
+import com.example.AUI.kingdom.repository.KingdomRepository;
 import com.example.AUI.kingdom.service.KingdomService;
 import com.example.AUI.species.dto.GetMultipleSpeciesResponse;
 import com.example.AUI.species.dto.GetSpeciesResponse;
+import com.example.AUI.species.dto.PostSpeciesRequest;
 import com.example.AUI.species.dto.PutSpeciesRequest;
 import com.example.AUI.species.entity.Species;
 import com.example.AUI.species.mapper.SpeciesMapper;
 import com.example.AUI.species.service.SpeciesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +34,7 @@ public class SpeciesController {
     public final String SPECIES_PATH_ID = SPECIES_PATH + "/{speciesId}";
     private final SpeciesService speciesService;
     private final SpeciesMapper speciesMapper;
+    private final KingdomService kingdomService;
 
     @GetMapping(SPECIES_PATH)
     public ResponseEntity getMultipleSpecies() {
@@ -62,5 +67,28 @@ public class SpeciesController {
         speciesService.updateSpeciesById(speciesId, speciesMapper.putSpeciesRequestToSpecies(species));
         return new ResponseEntity<>(null, HttpStatus.CREATED);
 
+    }
+
+    @PostMapping(SPECIES_PATH)
+    public ResponseEntity postSpecies(@RequestBody PostSpeciesRequest species){
+
+        Species newSpecies = speciesMapper.postSpeciesRequestToSpecies(species);
+        newSpecies.setId(UUID.randomUUID());
+
+        //adding kingdom field to species
+        Optional<Kingdom> speciesKingdom = kingdomService.getKingdomById(species.getKingdomId());
+        if(speciesKingdom.isPresent()) {
+            newSpecies.setKingdom(speciesKingdom.get());
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Species savedSpecies = speciesService.save(newSpecies);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", SPECIES_PATH + "/" + savedSpecies.getId().toString());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 }

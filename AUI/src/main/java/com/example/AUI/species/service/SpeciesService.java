@@ -11,6 +11,7 @@ public interface SpeciesService {
     List<Species> findAll();
     Species save(Species species);
     List<Species> findByKingdom(Kingdom kingdom);
+
     void delete(Species species);
     Species findByName(String name);
     Optional<Species> getSpeciesById(UUID id);

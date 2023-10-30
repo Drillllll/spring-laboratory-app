@@ -81,7 +81,7 @@ public class SpeciesController {
             newSpecies.setKingdom(speciesKingdom.get());
         }
         else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Species savedSpecies = speciesService.save(newSpecies);
@@ -90,5 +90,45 @@ public class SpeciesController {
         headers.add("Location", SPECIES_PATH + "/" + savedSpecies.getId().toString());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(SPECIES_PATH_ID)
+    public ResponseEntity deleteSpecies (@PathVariable("speciesId") UUID speciesId) {
+
+        Optional<Species> optionalSpecies = speciesService.getSpeciesById(speciesId);
+
+        if (optionalSpecies.isPresent()) {
+            speciesService.delete(optionalSpecies.get());
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @GetMapping(SPECIES_PATH + "/kingdom/{kingdomId}")
+    public ResponseEntity getSpeciesByKingdom(@PathVariable("kingdomId") UUID kingdomId) {
+
+        Optional<Kingdom> optionalKingdom = kingdomService.getKingdomById(kingdomId);
+
+        if(optionalKingdom.isPresent()) {
+            Kingdom kingdom = optionalKingdom.get();
+            List<Species> speciesByKingdom = speciesService.findByKingdom(kingdom);
+
+            List<GetSpeciesResponse> speciesResponses = speciesByKingdom
+                    .stream()
+                    .map(speciesMapper::speciesToGetSpeciesResponse)
+                    .collect(Collectors.toList());
+
+            GetMultipleSpeciesResponse response = GetMultipleSpeciesResponse.builder()
+                    .species(speciesResponses)
+                    .build();
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,11 +45,16 @@ public class KingdomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping(KINGDOM_PATH_ID)
-    public ResponseEntity<GetKingdomResponse> getKingdom(@PathVariable("kingdomId") UUID kingdomId){
-        return new ResponseEntity<>(kingdomMapper.kingdomToGetKingdomResponse(kingdomService.getKingdomById(kingdomId).get()),
-        HttpStatus.OK);
+    public ResponseEntity<GetKingdomResponse> getKingdom(@PathVariable("kingdomId") UUID kingdomId) {
+        Optional<Kingdom> optionalKingdom = kingdomService.getKingdomById(kingdomId);
 
+        if (optionalKingdom.isPresent()) {
+            return new ResponseEntity<>(kingdomMapper.kingdomToGetKingdomResponse(optionalKingdom.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
     @PutMapping(KINGDOM_PATH_ID)
     public ResponseEntity<Void> putKingdom(@PathVariable("kingdomId") UUID kingdomId, @RequestBody PutKingdomRequest kingdom){
         kingdomService.updateKingdomById(kingdomId, kingdomMapper.putKingdomRequestToKingdom(kingdom));
@@ -72,9 +78,15 @@ public class KingdomController {
 
     @DeleteMapping(KINGDOM_PATH_ID)
     public ResponseEntity deleteKingdom (@PathVariable("kingdomId") UUID kingdomId) {
-        kingdomService.delete(kingdomService.getKingdomById(kingdomId)
-                .orElseThrow(() -> new NoSuchElementException("Kingdom not found")));
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        Optional<Kingdom> optionalKingdom = kingdomService.getKingdomById(kingdomId);
+
+        if (optionalKingdom.isPresent()) {
+            kingdomService.delete(optionalKingdom.get());
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
     }
 }

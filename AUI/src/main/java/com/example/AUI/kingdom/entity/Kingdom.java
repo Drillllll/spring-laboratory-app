@@ -24,7 +24,7 @@ public class Kingdom implements Comparable<Kingdom> {
     @Column(name="taxonomy_year")
     private Integer taxonomyYear;
 
-    @OneToMany(mappedBy = "kingdom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "kingdom", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Species> species = new HashSet<>();
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -56,7 +57,7 @@ public class KingdomController {
     }
 
     @PostMapping(KINGDOM_PATH)
-    public ResponseEntity handlePost(@RequestBody PostKingdomRequest kingdom){
+    public ResponseEntity postKingdom(@RequestBody PostKingdomRequest kingdom){
 
         Kingdom newKingdom = kingdomMapper.postKingdomRequestToKingdom(kingdom);
         newKingdom.setId(UUID.randomUUID());
@@ -67,5 +68,13 @@ public class KingdomController {
         headers.add("Location", KINGDOM_PATH + "/" + savedKingdom.getId().toString());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(KINGDOM_PATH_ID)
+    public ResponseEntity deleteKingdom (@PathVariable("kingdomId") UUID kingdomId) {
+        kingdomService.delete(kingdomService.getKingdomById(kingdomId)
+                .orElseThrow(() -> new NoSuchElementException("Kingdom not found")));
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

@@ -6,6 +6,8 @@ import com.example.AUI.species.repository.SpeciesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SpeciesServiceImpl implements SpeciesService {
@@ -17,7 +19,7 @@ public class SpeciesServiceImpl implements SpeciesService {
     }
 
     @Override
-    public Iterable<Species> findAll() {
+    public List<Species> findAll() {
         return speciesRepository.findAll();
     }
 
@@ -39,5 +41,16 @@ public class SpeciesServiceImpl implements SpeciesService {
     @Override
     public Species findByName(String name) {
         return speciesRepository.findByName(name);
+    }
+
+    @Override
+    public Optional<Species> getSpeciesById(UUID id) {
+        return speciesRepository.findById(id);
+    }
+
+    @Override
+    public void updateSpeciesById(UUID speciesId, Species species) {
+        species.setId(speciesId);
+        speciesRepository.save(species);
     }
 }

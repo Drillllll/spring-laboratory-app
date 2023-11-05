@@ -64,8 +64,15 @@ public class SpeciesController {
 
     @PutMapping(SPECIES_PATH_ID)
     public ResponseEntity putSpecies(@PathVariable("speciesId") UUID speciesId, @RequestBody PutSpeciesRequest species){
-        speciesService.updateSpeciesById(speciesId, speciesMapper.putSpeciesRequestToSpecies(species));
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        Optional<Kingdom> optKingdom = kingdomService.getKingdomById(species.getKingdomId());
+        if(optKingdom.isPresent()) {
+            Kingdom kingdom = optKingdom.get();
+            speciesService.updateSpeciesById(speciesId, speciesMapper.putSpeciesRequestToSpecies(species, kingdom));
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 

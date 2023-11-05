@@ -31,7 +31,19 @@ public interface SpeciesMapper {
                 .build();
     }
 
-    Species putSpeciesRequestToSpecies(PutSpeciesRequest species);
+    default Species putSpeciesRequestToSpecies(PutSpeciesRequest species, Kingdom kingdom) {
+        if ( species == null ) {
+            return null;
+        }
+
+        Species.SpeciesBuilder species1 = Species.builder();
+
+        species1.name( species.getName() );
+        species1.classificationYear( species.getClassificationYear() );
+        species1.kingdom(kingdom);
+
+        return species1.build();
+    }
 
     Species postSpeciesRequestToSpecies(PostSpeciesRequest species);
 }

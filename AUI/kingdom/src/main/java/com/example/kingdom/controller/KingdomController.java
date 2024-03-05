@@ -1,0 +1,97 @@
+package com.example.kingdom.controller;
+
+
+
+import com.example.kingdom.dto.GetKingdomResponse;
+import com.example.kingdom.dto.GetKingdomsResponse;
+import com.example.kingdom.dto.PostKingdomRequest;
+import com.example.kingdom.dto.PutKingdomRequest;
+import com.example.kingdom.entity.Kingdom;
+import com.example.kingdom.mapper.KingdomMapper;
+import com.example.kingdom.service.KingdomService;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@RestController
+public class KingdomController {
+
+    public final String KINGDOM_PATH = "/api/kingdom";
+    public final String KINGDOM_PATH_ID = KINGDOM_PATH + "/{kingdomId}";
+    private final KingdomService kingdomService;
+    private final KingdomMapper kingdomMapper;
+
+
+    @GetMapping(KINGDOM_PATH)
+    public ResponseEntity<GetKingdomsResponse> getKingdoms(){
+
+
+        // Transform List<Kingdom> to List<GetKingdomResponse> using KingdomMapper
+        List<GetKingdomResponse> kingdomResponses = kingdomService.findAll()
+                .stream()
+                .map(kingdomMapper::kingdomToGetKingdomResponse)
+                .collect(Collectors.toList());
+
+
+
+        GetKingdomsResponse response = GetKingdomsResponse.builder()
+                .kingdoms(kingdomResponses)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping(KINGDOM_PATH_ID)
+    public ResponseEntity<GetKingdomResponse> getKingdom(@PathVariable("kingdomId") UUID kingdomId) {
+        Optional<Kingdom> optionalKingdom = kingdomService.getKingdomById(kingdomId);
+
+        if (optionalKingdom.isPresent()) {
+            return new ResponseEntity<>(kingdomMapper.kingdomToGetKingdomResponse(optionalKingdom.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping(KINGDOM_PATH_ID)
+    public ResponseEntity<Void> putKingdom(@PathVariable("kingdomId") UUID kingdomId, @RequestBody PutKingdomRequest kingdom){
+        kingdomService.updateKingdomById(kingdomId, kingdomMapper.putKingdomRequestToKingdom(kingdom));
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+
+    }
+
+    @PostMapping(KINGDOM_PATH)
+    public ResponseEntity postKingdom(@RequestBody PostKingdomRequest kingdom){
+
+        Kingdom newKingdom = kingdomMapper.postKingdomRequestToKingdom(kingdom);
+        newKingdom.setId(UUID.randomUUID());
+
+        Kingdom savedKingdom = kingdomService.save(newKingdom);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", KINGDOM_PATH + "/" + savedKingdom.getId().toString());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(KINGDOM_PATH_ID)
+    public ResponseEntity deleteKingdom (@PathVariable("kingdomId") UUID kingdomId) {
+
+        Optional<Kingdom> optionalKingdom = kingdomService.getKingdomById(kingdomId);
+
+        if (optionalKingdom.isPresent()) {
+            kingdomService.delete(optionalKingdom.get());
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+}
